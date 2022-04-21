@@ -4,5 +4,4 @@ idna>=3.3
 imap-tools>=0.54.0
 pyTelegramBotAPI>=4.4.1
 requests>=2.27.1
-telebot>=0.0.4
 urllib3>=1.26.9
