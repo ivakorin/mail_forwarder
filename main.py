@@ -4,10 +4,12 @@
 from imap_tools import MailBox, AND, A
 import imap_tools
 import telebot
+from os import path
 
 
 def read_config():
-    with open('.env', 'r') as f:
+    basedir = path.abspath(path.dirname(__file__))
+    with open(path.join(basedir, '.env'), 'r') as f:
         config = dict(
             tuple(line.replace('\n', '').split('='))
             for line in f.readlines() if not line.startswith('#')
@@ -16,30 +18,35 @@ def read_config():
     return config
 
 
-config = read_config()
-user_id = config['USER_ID']
-bot_token = config['BOT_TOKEN']
-bot = telebot.TeleBot(bot_token)
+def tg_bot(img):
+    config = read_config()
+    user_id = config['USER_ID']
+    bot_token = config['BOT_TOKEN']
+    bot = telebot.TeleBot(bot_token)
+    bot.send_photo(user_id, img)
 
-def get_mail(b):
+
+def get_mail():
     config = read_config()
     server = config['IMAP']
     login = config['MAIL']
     pwd = config['PASSWORD']
+    file_suffix = ('jpeg', 'jpg', 'png')
     try:
         mailbox = MailBox(server).login(login, pwd)
         for msg in mailbox.fetch(A(seen=False)):
             for att in msg.attachments:
-                img = att.payload
-                b.send_photo(user_id, img)
+                if att.filename.endswith(file_suffix):
+                    img = att.payload
+                    tg_bot(img)
         flags = imap_tools.MailMessageFlags.SEEN
         mailbox.flag(mailbox.uids(AND(seen=True)), flags, True)
         mailbox.logout()
-        return None
+        return True
     except Exception:
         return None
 
 
 while True:
-    #start
-    get_mail(bot)
+    # start
+    get_mail()
