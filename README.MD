@@ -1,5 +1,7 @@
 Mail Forwarder
 ---
+[![Donate](https://img.shields.io/badge/donate-YooMoney-8C3FFD.svg)](https://yoomoney.ru/to/41001138069842)  
+
 Пересылка изображений во вложении электронной почты в телеграм
 
 Установка виртуального окружиения: 
