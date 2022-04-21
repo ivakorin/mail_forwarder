@@ -24,6 +24,7 @@ def tg_bot(img):
     bot_token = config['BOT_TOKEN']
     bot = telebot.TeleBot(bot_token)
     bot.send_photo(user_id, img)
+    bot.close()
 
 
 def get_mail():
@@ -36,7 +37,8 @@ def get_mail():
         mailbox = MailBox(server).login(login, pwd)
         for msg in mailbox.fetch(A(seen=False)):
             for att in msg.attachments:
-                if att.filename.endswith(file_suffix):
+                ext = att.filename.lower()
+                if ext.endswith(file_suffix):
                     img = att.payload
                     tg_bot(img)
         flags = imap_tools.MailMessageFlags.SEEN
