@@ -24,7 +24,7 @@ def tg_bot(img):
     bot_token = config['BOT_TOKEN']
     bot = telebot.TeleBot(bot_token)
     bot.send_photo(user_id, img)
-    bot.close()
+    bot.stop_bot()
 
 
 def get_mail():
