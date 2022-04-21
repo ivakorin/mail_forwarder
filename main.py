@@ -35,7 +35,6 @@ def get_mail():
         mailbox.logout()
         return None
     except Exception:
-        print('Error!')
         return None
 
 
