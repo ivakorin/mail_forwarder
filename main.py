@@ -16,20 +16,22 @@ def read_config():
     return config
 
 
-def get_mail():
+config = read_config()
+user_id = config['USER_ID']
+bot_token = config['BOT_TOKEN']
+bot = telebot.TeleBot(bot_token)
+
+def get_mail(b):
     config = read_config()
     server = config['IMAP']
     login = config['MAIL']
     pwd = config['PASSWORD']
-    bot_token = config['BOT_TOKEN']
-    user_id = config['USER_ID']
-    bot = telebot.TeleBot(bot_token)
     try:
         mailbox = MailBox(server).login(login, pwd)
         for msg in mailbox.fetch(A(seen=False)):
             for att in msg.attachments:
                 img = att.payload
-                bot.send_photo(user_id, img)
+                b.send_photo(user_id, img)
         flags = imap_tools.MailMessageFlags.SEEN
         mailbox.flag(mailbox.uids(AND(seen=True)), flags, True)
         mailbox.logout()
@@ -40,4 +42,4 @@ def get_mail():
 
 while True:
     #start
-    get_mail()
+    get_mail(bot)
