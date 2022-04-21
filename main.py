@@ -22,7 +22,7 @@ def get_mail():
     login = config['MAIL']
     pwd = config['PASSWORD']
     bot_token = config['BOT_TOKEN']
-    user_id = config['ADMIN_ID']
+    user_id = config['USER_ID']
     bot = telebot.TeleBot(bot_token)
     try:
         mailbox = MailBox(server).login(login, pwd)
